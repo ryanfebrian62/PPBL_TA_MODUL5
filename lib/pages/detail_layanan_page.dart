@@ -59,7 +59,7 @@ class _DetailLayananPageState extends State<DetailLayananPage> {
 
     Navigator.pop(
       context,
-      'Permohonan "${widget.nama}" berhasil diajukan.',
+      '"${widget.nama}" ditambahkan ke keranjang pengajuan.',
     );
   }
 
@@ -74,8 +74,6 @@ class _DetailLayananPageState extends State<DetailLayananPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
         title: const Text('Detail Layanan'),
         centerTitle: true,
       ),
@@ -84,10 +82,10 @@ class _DetailLayananPageState extends State<DetailLayananPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(
+            Icon(
               Icons.description,
               size: 70,
-              color: Colors.blue,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(height: 16),
 
@@ -135,7 +133,6 @@ class _DetailLayananPageState extends State<DetailLayananPage> {
               onChanged: (_) => setState(() {}),
               decoration: const InputDecoration(
                 labelText: 'Nama Lengkap',
-                border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.person),
               ),
             ),
@@ -147,7 +144,6 @@ class _DetailLayananPageState extends State<DetailLayananPage> {
               onChanged: (_) => setState(() {}),
               decoration: const InputDecoration(
                 labelText: 'Email',
-                border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.email),
               ),
             ),
@@ -166,8 +162,8 @@ class _DetailLayananPageState extends State<DetailLayananPage> {
                 });
               },
             ),
-
             const SizedBox(height: 8),
+
             const Text(
               'Pilih Sesi Kunjungan',
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -203,7 +199,6 @@ class _DetailLayananPageState extends State<DetailLayananPage> {
                 });
               },
             ),
-
             const SizedBox(height: 16),
 
             SizedBox(
@@ -213,16 +208,23 @@ class _DetailLayananPageState extends State<DetailLayananPage> {
                 onPressed: _formValid && !_sedangMengirim
                     ? _ajukanPermohonan
                     : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                ),
                 child: _sedangMengirim
-                    ? const CircularProgressIndicator(
-                        color: Colors.white,
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
                       )
-                    : const Text('Kirim Pengajuan'),
+                    : const Text('Ajukan Permohonan'),
               ),
+            ),
+            const SizedBox(height: 8),
+
+            const Text(
+              'Layanan akan masuk ke keranjang. Anda dapat mengirim '
+              'semua layanan sekaligus dari halaman Warga.',
+              style: TextStyle(fontSize: 12),
             ),
           ],
         ),

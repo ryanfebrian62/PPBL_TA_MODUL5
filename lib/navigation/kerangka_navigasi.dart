@@ -1,5 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../cubit/pengajuan_cubit.dart';
 import '../pages/beranda_page.dart';
 import '../pages/layanan_page.dart';
@@ -34,9 +36,7 @@ class _KerangkaNavigasiState extends State<KerangkaNavigasi> {
 
     final halaman = [
       BerandaPage(
-        onBukaLayanan: () {
-          _ubahHalaman(1);
-        },
+        onBukaLayanan: () => _ubahHalaman(1),
       ),
       const LayananPage(),
       const WargaPage(),
@@ -44,8 +44,6 @@ class _KerangkaNavigasiState extends State<KerangkaNavigasi> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
         title: const Text(
           'NUSANTARA CERDAS',
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -67,66 +65,61 @@ class _KerangkaNavigasiState extends State<KerangkaNavigasi> {
             padding: EdgeInsets.fromLTRB(28, 24, 16, 16),
             child: Text(
               'Menu Utama',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-
           const NavigationDrawerDestination(
             icon: Icon(Icons.home_outlined),
             selectedIcon: Icon(Icons.home),
             label: Text('Beranda'),
           ),
-
           const NavigationDrawerDestination(
             icon: Icon(Icons.miscellaneous_services_outlined),
             selectedIcon: Icon(Icons.miscellaneous_services),
             label: Text('Layanan'),
           ),
-
           const NavigationDrawerDestination(
             icon: Icon(Icons.people_outline),
             selectedIcon: Icon(Icons.people),
             label: Text('Warga'),
           ),
-
           const Padding(
             padding: EdgeInsets.fromLTRB(28, 24, 16, 8),
             child: Text(
               'Menu Pendukung',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-
           ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('Pengaturan Kota'),
-            onTap: () {
-              _bukaDrawerRoute('/pengaturan');
-            },
+            onTap: () => _bukaDrawerRoute(AppRoutes.pengaturan),
           ),
-
           ListTile(
             leading: const Icon(Icons.bar_chart),
             title: const Text('Statistik Layanan'),
             onTap: () => _bukaDrawerRoute(AppRoutes.statistik),
           ),
-
           ListTile(
             leading: const Icon(Icons.info_outline),
             title: const Text('Tentang Aplikasi'),
-            onTap: () {
-              _bukaDrawerRoute('/tentang');
-            },
+            onTap: () => _bukaDrawerRoute(AppRoutes.tentang),
           ),
-
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Keluar'),
             onTap: () {
               Navigator.pop(context);
-
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Menu Keluar dipilih')),
+                const SnackBar(
+                  content: Text('Menu Keluar dipilih'),
+                ),
               );
             },
           ),
@@ -152,14 +145,15 @@ class _KerangkaNavigasiState extends State<KerangkaNavigasi> {
                   label: Text('Layanan'),
                 ),
                 NavigationRailDestination(
-                  icon: const IkonWargaDenganBadge(terpilih: false),
-                  selectedIcon: const IkonWargaDenganBadge(terpilih: true),
-                  label: const Text('Warga'),
+                  icon: IkonWargaDenganBadge(terpilih: false),
+                  selectedIcon: IkonWargaDenganBadge(terpilih: true),
+                  label: Text('Warga'),
                 ),
               ],
             ),
-
-          Expanded(child: halaman[_indexAktif]),
+          Expanded(
+            child: halaman[_indexAktif],
+          ),
         ],
       ),
 
@@ -180,8 +174,8 @@ class _KerangkaNavigasiState extends State<KerangkaNavigasi> {
                   label: 'Layanan',
                 ),
                 NavigationDestination(
-                  icon: const IkonWargaDenganBadge(terpilih: false),
-                  selectedIcon: const IkonWargaDenganBadge(terpilih: true),
+                  icon: IkonWargaDenganBadge(terpilih: false),
+                  selectedIcon: IkonWargaDenganBadge(terpilih: true),
                   label: 'Warga',
                 ),
               ],
@@ -191,20 +185,29 @@ class _KerangkaNavigasiState extends State<KerangkaNavigasi> {
 }
 
 class IkonWargaDenganBadge extends StatelessWidget {
-  const IkonWargaDenganBadge({super.key, required this.terpilih});
+  const IkonWargaDenganBadge({
+    super.key,
+    required this.terpilih,
+  });
 
   final bool terpilih;
 
   @override
   Widget build(BuildContext context) {
-    final total = context.select<PengajuanCubit, int>(
-      (cubit) => cubit.totalPengajuan,
-    );
-
-    return Badge(
-      isLabelVisible: total > 0,
-      label: Text('$total'),
-      child: Icon(terpilih ? Icons.people : Icons.people_outline),
+    return BlocSelector<
+        PengajuanCubit,
+        List<Map<String, dynamic>>,
+        int>(
+      selector: (state) => state.length,
+      builder: (context, total) {
+        return Badge(
+          isLabelVisible: total > 0,
+          label: Text('$total'),
+          child: Icon(
+            terpilih ? Icons.people : Icons.people_outline,
+          ),
+        );
+      },
     );
   }
 }
